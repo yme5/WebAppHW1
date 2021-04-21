@@ -13,7 +13,7 @@
     <tbody>
     {% for tree in trees %}
     <tr>
-        <td>{{ tree.id }}</td>
+        <td><a href="view/{{tree.id}}">{{ tree.id }}</a></td>
         <td>{{ tree.Girth_in }}</td>
         <td>{{ tree.Height_ft }}</td>
         <td>{{ tree.Volume_ft_3 }}</td>
