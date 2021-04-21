@@ -5,9 +5,10 @@ CREATE TABLE IF NOT EXISTS tblTreesImport (
     `id` INT,
     `Girth_in` NUMERIC(3, 1),
     `Height_ft` INT,
-    `Volume_ft_3` NUMERIC(3, 1)
+    `Volume_ft_3` NUMERIC(3, 1),
+     PRIMARY KEY (`id`)
 );
-INSERT INTO tblTreesImport VALUES
+INSERT INTO tblTreesImport (id,Girth_in,Height_ft,Volume_ft_3) VALUES
     ( 1,   8.3,     70,   10.3),
     ( 2,   8.6,     65,   10.3),
     ( 3,   8.8,     63,   10.2),
