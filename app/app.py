@@ -91,6 +91,16 @@ def form_update_post(tree_id):
     return redirect("/", code=302)
 
     #DELETE A RECORD
+
+@app.route('/delete/<int:tree_id>', methods=['POST'])
+def form_delete_post(tree_id):
+    cursor = mysql.get_db().cursor()
+    sql_delete_query = """DELETE FROM tblTreesImport WHERE id = %s """
+    cursor.execute(sql_delete_query, tree_id)
+    mysql.get_db().commit()
+    return redirect("/", code=302)
+
+
 @app.route('/api/v1/trees/', methods=['POST'])
 def api_add() -> str:
     resp = Response(status=201, mimetype='application/json')
