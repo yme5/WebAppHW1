@@ -2,16 +2,18 @@
 {% block content %}
 
 <div class="card" class="m-5 p-2">
-    <h5 class="card-title">Tree Number {{ tree.id }}</h5>
 
+    <h5 class="card-title">Tree Number {{ tree.id }}</h5>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{ tree.Girth_in }}</li>
-        <li class="list-group-item">{{ tree.Height_ft }}</li>
-        <li class="list-group-item">{{ tree.Volume_ft_3 }}</li>
+        <li class="list-group-item"> This tree has a girth of {{ tree.Girth_in }} inches</li>
+        <li class="list-group-item"> This tree has a height of {{ tree.Height_ft }} feet</li>
+        <li class="list-group-item"> This tree has a volume of {{ tree.Volume_ft_3 }} feet cubed</li>
     </ul>
+
     <div class="card-body">
         <a href="/edit/{{tree.id}}" class="card-link btn btn-primary">edit</a>
     </div>
+
 </div>
 <form action="/delete/{{tree.id}}" method="post"><button type="submit" class="btn btn-danger">Delete</button></form>
 

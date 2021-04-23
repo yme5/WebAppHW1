@@ -40,5 +40,19 @@ def api_browse() -> str:
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
+@app.route('/trees/new', methods=['GET'])
+def form_insert_get():
+    return render_template('new.html', title='New Tree Form')
+
+@app.route('/trees/new', methods=['POST'])
+def form_insert_post():
+    cursor = mysql.get_db().cursor()
+    inputData = (request.form.get('id'), request.form.get('Girth_in'), request.form.get('Height_ft'),
+                 request.form.get('Volume_ft_3'))
+    sql_insert_query = """INSERT INTO tblTreesImport (id,Girth_in,Height_ft,Volume_ft_3) VALUES (%s, %s,%s, %s) """
+    cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
+    return redirect("/", code=302)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
