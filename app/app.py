@@ -15,6 +15,7 @@ app.config['MYSQL_DATABASE_PORT'] = 3306
 app.config['MYSQL_DATABASE_DB'] = 'treesData'
 mysql.init_app(app)
 
+    #HOMEPAGE
 
 @app.route('/', methods=['GET'])
 def index():
@@ -24,12 +25,16 @@ def index():
     result = cursor.fetchall()
     return render_template('index.html', title='Home', user=user, trees=result)
 
+    #VIEW INDIVIDUAL RECORD
+
 @app.route('/view/<int:tree_id>', methods=['GET'])
 def record_view(tree_id):
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM tblTreesImport WHERE id=%s', tree_id)
     result = cursor.fetchall()
     return render_template('view.html', title='View Form', tree=result[0])
+
+    #VIEW API RECORD
 
 @app.route('/api/v1/trees', methods=['GET'])
 def api_browse() -> str:
@@ -39,6 +44,8 @@ def api_browse() -> str:
     json_result = json.dumps(result);
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
+
+    #CREATE A NEW RECORD
 
 @app.route('/trees/new', methods=['GET'])
 def form_insert_get():
@@ -51,6 +58,26 @@ def form_insert_post():
                  request.form.get('Volume_ft_3'))
     sql_insert_query = """INSERT INTO tblTreesImport (id,Girth_in,Height_ft,Volume_ft_3) VALUES (%s, %s,%s, %s) """
     cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
+    return redirect("/", code=302)
+
+    #EDIT A RECORD
+
+@app.route('/edit/<int:tree_id>', methods=['GET'])
+def form_edit_get(tree_id):
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM tblTreesImport WHERE id=%s', tree_id)
+    result = cursor.fetchall()
+    return render_template('edit.html', title='Edit Form', tree=result[0])
+
+
+@app.route('/edit/<int:tree_id>', methods=['POST'])
+def form_update_post(tree_id):
+    cursor = mysql.get_db().cursor()
+    inputData = (request.form.get('Girth_in'), request.form.get('Height_ft'),
+                 request.form.get('Volume_ft_3'), tree_id)
+    sql_update_query = """UPDATE tblTreesImport t SET t.Girth_in = %s, t.Height_ft = %s, t.Volume_ft_3 = %s WHERE t.id = %s """
+    cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
 
