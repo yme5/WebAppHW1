@@ -45,6 +45,15 @@ def api_browse() -> str:
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
+@app.route('/api/v1/trees/<int:tree_id>', methods=['GET'])
+def api_retrieve(tree_id) -> str:
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM tblTreesImport WHERE id=%s', tree_id)
+    result = cursor.fetchall()
+    json_result = json.dumps(result);
+    resp = Response(json_result, status=200, mimetype='application/json')
+    return resp
+
     #CREATE A NEW RECORD
 
 @app.route('/trees/new', methods=['GET'])
@@ -80,6 +89,25 @@ def form_update_post(tree_id):
     cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
+
+    #DELETE A RECORD
+@app.route('/api/v1/trees/', methods=['POST'])
+def api_add() -> str:
+    resp = Response(status=201, mimetype='application/json')
+    return resp
+
+
+@app.route('/api/v1/trees/<int:tree_id>', methods=['PUT'])
+def api_edit(tree_id) -> str:
+    resp = Response(status=201, mimetype='application/json')
+    return resp
+
+
+@app.route('/api/trees/<int:tree_id>', methods=['DELETE'])
+def api_delete(tree_id) -> str:
+    resp = Response(status=210, mimetype='application/json')
+    return resp
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
