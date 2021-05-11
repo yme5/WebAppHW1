@@ -130,9 +130,13 @@ def api_add() -> str:
 
 
 
-@app.route('/api/trees/<int:tree_id>', methods=['DELETE'])
+@app.route('/api/v1/trees/<int:tree_id>', methods=['DELETE'])
 def api_delete(tree_id) -> str:
-    resp = Response(status=210, mimetype='application/json')
+    cursor = mysql.get_db().cursor()
+    sql_delete_query = """DELETE FROM tblTreesImport WHERE id = %s """
+    cursor.execute(sql_delete_query, tree_id)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
     return resp
 
 
