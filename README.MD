@@ -1,5 +1,5 @@
 # Project Description
-This project is a homework assingment to teach how to get Pycharm setup with Docker, Flask, MySQL
+This project is a the final assignment to teach how to get set up a RESTAPI using Flask, MySQL
 
 #Postman Screenshot
-![postman_request_output](screenshots/postman.png)
+Are in the word file that is submitted in canvas
