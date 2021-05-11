@@ -34,25 +34,7 @@ def record_view(tree_id):
     result = cursor.fetchall()
     return render_template('view.html', title='View Form', tree=result[0])
 
-    #VIEW API RECORD
 
-@app.route('/api/v1/trees', methods=['GET'])
-def api_browse() -> str:
-    cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM tblTreesImport')
-    result = cursor.fetchall()
-    json_result = json.dumps(result);
-    resp = Response(json_result, status=200, mimetype='application/json')
-    return resp
-
-@app.route('/api/v1/trees/<int:tree_id>', methods=['GET'])
-def api_retrieve(tree_id) -> str:
-    cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM tblTreesImport WHERE id=%s', tree_id)
-    result = cursor.fetchall()
-    json_result = json.dumps(result);
-    resp = Response(json_result, status=200, mimetype='application/json')
-    return resp
 
     #CREATE A NEW RECORD
 
@@ -101,16 +83,51 @@ def form_delete_post(tree_id):
     return redirect("/", code=302)
 
 
-@app.route('/api/v1/trees/', methods=['POST'])
-def api_add() -> str:
-    resp = Response(status=201, mimetype='application/json')
+    #REST API RECORD
+
+@app.route('/api/v1/trees', methods=['GET'])
+def api_browse() -> str:
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM tblTreesImport')
+    result = cursor.fetchall()
+    json_result = json.dumps(result);
+    resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
+@app.route('/api/v1/trees/<int:tree_id>', methods=['GET'])
+def api_retrieve(tree_id) -> str:
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM tblTreesImport WHERE id=%s', tree_id)
+    result = cursor.fetchall()
+    json_result = json.dumps(result);
+    resp = Response(json_result, status=200, mimetype='application/json')
+    return resp
 
 @app.route('/api/v1/trees/<int:tree_id>', methods=['PUT'])
 def api_edit(tree_id) -> str:
+    cursor = mysql.get_db().cursor()
+    content = request.json
+    inputData = (content['Girth_in'], content['Height_ft'],
+                 content['Volume_ft_3'], tree_id)
+    sql_update_query = """UPDATE tblTreesImport t SET t.Girth_in = %s, t.Height_ft = %s, t.Volume_ft_3 = %s WHERE t.id = %s """
+    cursor.execute(sql_update_query, inputData)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
+    return resp
+
+
+@app.route('/api/v1/trees/', methods=['POST'])
+def api_add() -> str:
+    content = request.json
+    cursor = mysql.get_db().cursor()
+    inputData = (content['id'],content['Girth_in'], content['Height_ft'],
+                 content['Volume_ft_3'])
+    sql_insert_query = """INSERT INTO tblTreesImport (id,Girth_in,Height_ft,Volume_ft_3) VALUES (%s,%s, %s,%s) """
+    cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
     resp = Response(status=201, mimetype='application/json')
     return resp
+
 
 
 @app.route('/api/trees/<int:tree_id>', methods=['DELETE'])
