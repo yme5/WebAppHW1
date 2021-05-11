@@ -128,8 +128,6 @@ def api_add() -> str:
     resp = Response(status=201, mimetype='application/json')
     return resp
 
-
-
 @app.route('/api/v1/trees/<int:tree_id>', methods=['DELETE'])
 def api_delete(tree_id) -> str:
     cursor = mysql.get_db().cursor()
