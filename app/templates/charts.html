@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<div id="chart"></div>
+
+<script>
+
+
+
+    const layout = {
+      title: 'Trees, Visualized',
+        xaxis: {
+            title: {
+              text: 'Height',
+              font: {
+                family: 'Calibre, monospace',
+                size: 18
+              }
+            },
+          },
+          yaxis: {
+              title: {
+                  text: 'Volume',
+                  font: {
+                      family: 'Calibre, monospace',
+                      size: 18
+                  }
+              }
+          }
+    };
+
+    var volume = [];
+    var height = [];
+    var girth = [];
+    var id = [];
+
+
+    function print_tree(trees) {
+        {% for tree in trees %}
+            console.log({{ tree.id }});
+            console.log({{ tree.Girth_in }});
+            console.log({{ tree.Height_ft }});
+            console.log({{ tree.Volume_ft_3 }});
+        {% endfor %}
+    }
+
+    {% for tree in trees %}
+        height.push({{ tree.Height_ft }})
+        volume.push({{ tree.Volume_ft_3 }})
+        girth.push({{ tree.Girth_in }})
+        id.push({{ tree.id }})
+    {% endfor %}
+
+    console.log(height);
+    console.log(volume);
+
+    const data = [{
+    x: height,
+    y: volume,
+
+    mode: 'markers',
+    type: 'scatter',
+    marker: {
+          size: girth
+        name: id
+      }
+    }]
+
+    Plotly.newPlot('chart', data, layout);
+
+
+</script>
+<p>{{ tree }}</p>
+
+<p>
+    {% for tree in trees %}
+    <tr><td>{{ tree.Girth_in }}</td></tr>
+    <tr>
+        <td><a href="/view/{{ tree.id }}">{{ tree.id }}</a></td>
+        <td>{{ tree.Girth_in }}</td>
+        <td>{{ tree.Height_ft }}</td>
+        <td>{{ tree.Volume_ft_3 }}</td>
+    </tr>
+    {% endfor %}
+</p>
+
+{% endblock %}

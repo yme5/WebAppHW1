@@ -34,7 +34,15 @@ def record_view(tree_id):
     result = cursor.fetchall()
     return render_template('view.html', title='View Form', tree=result[0])
 
+    #CREATE A CHARTS PAGE
 
+@app.route('/trees/charts', methods=['GET'])
+def charts():
+    user = {'username': 'Yousuf'}
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM tblTreesImport')
+    result = cursor.fetchall()
+    return render_template('charts.html', title='Tree Charts', user=user, trees=result)
 
     #CREATE A NEW RECORD
 
@@ -85,7 +93,7 @@ def form_delete_post(tree_id):
 
     #REST API RECORD
 
-@app.route('/api/v1/trees', methods=['GET'])
+@app.route('/trees/api/v1/trees', methods=['GET'])
 def api_browse() -> str:
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM tblTreesImport')
