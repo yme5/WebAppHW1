@@ -53,33 +53,34 @@
     console.log(volume);
 
     const data = [{
-    x: height,
-    y: volume,
-
-    mode: 'markers',
-    type: 'scatter',
-    marker: {
-          size: girth,
-        text: id
-      }
+           x: height,
+          y: volume,
+          mode: 'markers+text',
+          type: 'scatter',
+          text: id,
+          textposition: 'top center',
+          textfont: {
+            family:  'Raleway, sans-serif'
+          },
+          marker: { size: girth }
     }]
 
     Plotly.newPlot('chart', data, layout);
 
 
 </script>
-<p>{{ tree }}</p>
+<div>This is a scatter plot showing the height of the trees plotted against their volume, with the size of each marker directly correlated to the girth of the tree. </div>
 
-<p>
-    {% for tree in trees %}
-    <tr><td>{{ tree.Girth_in }}</td></tr>
-    <tr>
-        <td><a href="/view/{{ tree.id }}">{{ tree.id }}</a></td>
-        <td>{{ tree.Girth_in }}</td>
-        <td>{{ tree.Height_ft }}</td>
-        <td>{{ tree.Volume_ft_3 }}</td>
-    </tr>
-    {% endfor %}
-</p>
+<!--<p>-->
+<!--    {% for tree in trees %}-->
+<!--    <tr><td>{{ tree.Girth_in }}</td></tr>-->
+<!--    <tr>-->
+<!--        <td><a href="/view/{{ tree.id }}">{{ tree.id }}</a></td>-->
+<!--        <td>{{ tree.Girth_in }}</td>-->
+<!--        <td>{{ tree.Height_ft }}</td>-->
+<!--        <td>{{ tree.Volume_ft_3 }}</td>-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--</p>-->
 
 {% endblock %}
