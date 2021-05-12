@@ -44,13 +44,6 @@ def charts():
     result = cursor.fetchall()
     return render_template('charts.html', title='Tree Charts', user=user, trees=result)
 
-@app.route('/trees/calendar', methods=['GET'])
-def calendar():
-    user = {'username': 'Yousuf'}
-    cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM tblTreesImport')
-    result = cursor.fetchall()
-    return render_template('calendar.html', title='Tree calendar', user=user, trees=result)
 
     #CREATE A NEW RECORD
 
